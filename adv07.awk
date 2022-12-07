@@ -12,9 +12,9 @@ END {
             sum += dirs[d]
     }
     needed = 30000000 - (70000000 - dirs["/"])
-    best = "/"
+    best = dirs["/"]
     for (d in dirs)
-        if (dirs[d] >= needed && dirs[d] < dirs[best])
-            best = d
-    print sum ", " dirs[best]
+        if (dirs[d] >= needed && dirs[d] < best)
+            best = dirs[d]
+    print sum ", " best
 }

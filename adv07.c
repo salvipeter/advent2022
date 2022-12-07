@@ -25,12 +25,11 @@ Dir *computeSizes(FILE *f, Dir *dirs) {
   int size = 0;
   if (!fgets(line, 30, f))
     return dir_insert(dirs, 0);
-  while (strcmp(line, "$ cd ..") != 0) {
+  while (strncmp(line, "$ cd ..", 7) != 0) {
     if (strncmp(line, "$ cd", 4) == 0 && line[5] != '/') {
       dirs = computeSizes(f, dirs);
       size += dirs->size;
-    }
-    if (line[0] >= '0' && line[0] <= '9')
+    } else if (line[0] >= '0' && line[0] <= '9')
       size += atoi(line);
     if (!fgets(line, 30, f))
       break;
@@ -39,7 +38,7 @@ Dir *computeSizes(FILE *f, Dir *dirs) {
 }
 
 int main(void) {
-  FILE *f = fopen("test07.txt", "r");
+  FILE *f = fopen("adv07.txt", "r");
   Dir *dirs = computeSizes(f, NULL);
   fclose(f);
 
@@ -49,12 +48,11 @@ int main(void) {
       sum += d->size;
 
   int needed = 30000000 - (70000000 - dirs->size);
-  Dir *minimal = dirs;
+  int best = dirs->size;
   for (Dir *d = dirs; d; d = d->next)
-    if (d->size >= needed && d->size < minimal->size)
-      minimal = d;
-
-  printf("%d, %d\n", sum, minimal->size);
-
+    if (d->size >= needed && d->size < best)
+      best = d->size;
   dir_free(dirs);
+
+  printf("%d, %d\n", sum, best);
 }
