@@ -19,16 +19,16 @@
 (define (grid-size grid)
   (vector-length grid))
 
+(define (iota2 n)
+  (concatenate
+   (map (lambda (x)
+          (map (lambda (y) (cons x y)) (iota n)))
+        (iota n))))
+
 (define (grid-fold f op init grid)
-  (let ((n (grid-size grid)))
-    (let xloop ((x 0) (acc init))
-      (if (= x n)
-          acc
-          (xloop (+ x 1)
-                 (let yloop ((y 0) (acc acc))
-                   (if (= y n)
-                       acc
-                       (yloop (+ y 1) (op acc (f grid x y))))))))))
+  (fold (lambda (xy a)
+          (op (f grid (car xy) (cdr xy)) a))
+        init (iota2 (grid-size grid))))
 
 ;;; Interesting part
 
