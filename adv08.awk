@@ -1,4 +1,4 @@
-BEGIN { FS = "" ; SUBSEP = "@" }
+BEGIN { FS = "" }
 {
     for (i = 1; i <= NF; i++)
         grid[NR,i] = $i
@@ -19,7 +19,7 @@ END {
 # If not found, returns the negative distance to the edge
 function distance(dx, dy) {
     height = grid[pos]
-    split(pos, xy, "@")
+    split(pos, xy, SUBSEP)
     x = xy[1]; y = xy[2]
     for (k = 1; k <= NR; k++) {
         x += dx; y += dy
