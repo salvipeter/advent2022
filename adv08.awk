@@ -5,20 +5,19 @@ BEGIN { FS = "" ; SUBSEP = "@" }
 }
 END {
     for (pos in grid) {
-        if (distance(pos, 1, 0) <= 0 || distance(pos, -1, 0) <= 0 ||
-            distance(pos, 0, 1) <= 0 || distance(pos, 0, -1) <= 0)
+        if (distance(1, 0) <= 0 || distance(-1, 0) <= 0 ||
+            distance(0, 1) <= 0 || distance(0, -1) <= 0)
             count++
-        score = scenic(pos, 1, 0) * scenic(pos, -1, 0) \
-            * scenic(pos, 0, 1) * scenic(pos, 0, -1)
+        score = scenic(1, 0) * scenic(-1, 0) * scenic(0, 1) * scenic(0, -1)
         if (score > best)
             best = score
     }
     print count ", " best
 }
 
-# Distance from a tree at least as tall in the given direction
+# Distance of grid[pos] from a tree at least as tall in the given direction
 # If not found, returns the negative distance to the edge
-function distance(pos, dx, dy) {
+function distance(dx, dy) {
     height = grid[pos]
     split(pos, xy, "@")
     x = xy[1]; y = xy[2]
@@ -31,8 +30,8 @@ function distance(pos, dx, dy) {
     }
 }
 
-function scenic(pos, dx, dy) {
-    d = distance(pos, dx, dy)
+function scenic(dx, dy) {
+    d = distance(dx, dy)
     if (d < 0)
         return -d
     return d
