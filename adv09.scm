@@ -9,11 +9,12 @@
                     (loop))))))))
 
 (define (delta cmd)
-  (case (car cmd)
-    ((U) (list 0 (cdr cmd)))
-    ((D) (list 0 (- (cdr cmd))))
-    ((L) (list (- (cdr cmd)) 0))
-    ((R) (list (cdr cmd) 0))))
+  (let ((n (cdr cmd)))
+    (case (car cmd)
+      ((U) (list 0 n))
+      ((D) (list 0 (- n)))
+      ((L) (list (- n) 0))
+      ((R) (list n 0)))))
 
 (define (step pos dir forward?)
   (map (lambda (x d)
@@ -22,7 +23,7 @@
                (else x)))
        pos dir))
 
-(define (move cmd state)
+(define (move cmd state)           ; destructively modifies the position vector
   (let* ((pos (car state))
          (visits (cdr state))
          (d (delta cmd))
