@@ -9,13 +9,12 @@
                         (cons `(addx ,n) (loop))))))))))
 
 (define (step state)
-  (let ((x (car state))
-        (cycle (cadr state))
-        (sum (caddr state)))
+  (let-values (((x cycle sum) (apply values state)))
     (if (= (mod cycle 40) 20)
         (list x (+ cycle 1) (+ sum (* cycle x)))
         (list x (+ cycle 1) sum))))
 
+;;; Works with both 2- and 3-element STATEs
 (define (add state n)
   (cons (+ (car state) n)
         (cdr state)))
@@ -29,13 +28,12 @@
          '(1 1 0) data)))
 
 (define (crt state)
-  (let* ((x (car state))
-         (cycle (cadr state))
-         (pos (mod (- cycle 1) 40)))
-    (display (if (< (abs (- pos x)) 2) #\# #\.))
-    (when (= (mod cycle 40) 0)
-      (newline))
-    (list x (+ cycle 1))))
+  (let-values (((x cycle) (apply values state)))
+    (let ((pos (mod (- cycle 1) 40)))
+      (display (if (< (abs (- pos x)) 2) #\# #\.))
+      (when (= (mod cycle 40) 0)
+        (newline))
+      (list x (+ cycle 1)))))
 
 (define (adv10b data)
   (fold (lambda (cmd state)
