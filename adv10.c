@@ -8,7 +8,7 @@ int main(void) {
   char line[10];
   FILE *f = fopen("adv10.txt", "r");
   while (fgets(line, 10, f)) {
-    bool add = strncmp(line, "noop", 4) != 0;
+    bool add = strncmp(line, "addx", 4) == 0;
     for (int i = 0; i < (add ? 2 : 1); ++i) {
       int crt = (cycle - 1) % 40;
       printf("%c", abs(crt - x) < 2 ? '#' : '.');

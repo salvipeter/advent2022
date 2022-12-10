@@ -1,4 +1,4 @@
-BEGIN { x = 1; cycle = 1; ORS="" }
+BEGIN { x = 1; cycle = 1; ORS = "" }
 /noop/ { step() }
 /addx/ { step(); step(); x += $2 }
 END { print sum "\n" }
