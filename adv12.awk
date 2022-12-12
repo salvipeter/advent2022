@@ -26,7 +26,7 @@ END {
             from = queue[k++]
             d = distance[from] + 1
             for (i = 1; i <= n[from]; i++) {
-                to = edges[from][i]
+                to = edges[from,i]
                 if (!(to in distance) || d < distance[to]) {
                     distance[to] = d
                     queue[++len] = to
@@ -45,5 +45,5 @@ function addEdge(dx, dy) {
     split(pos, xy, SUBSEP)
     x = xy[1] + dx; y = xy[2] + dy
     if (x >= 1 && y >= 1 && x <= NF && y <= NF && map[x,y] <= map[pos] + 1)
-        edges[pos][++n[pos]] = x SUBSEP y
+        edges[pos,++n[pos]] = x SUBSEP y
 }

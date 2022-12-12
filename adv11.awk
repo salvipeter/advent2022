@@ -2,7 +2,7 @@ BEGIN { m = -1; mod = 1 }
 /Monkey/ { m++ }
 /Starting/ {
     for (i = 3; i <= NF; i++)
-        items[m][++n[m]] = int($i)
+        items[m,++n[m]] = int($i)
 }
 /Operation/ { op[m] = $5; operand[m] = $6 }
 /Test/ { test[m] = $4; mod *= $4 }
@@ -13,12 +13,12 @@ END { # call with -v part=2 for part 2
         for (j = 0; j <= m; j++) {
             for (k = 1; k <= n[j]; k++) {
                 count[j]++
-                t = items[j][k]
+                t = items[j,k]
                 x = operand[j] == "old" ? t : operand[j]
                 t = op[j] == "*" ? t * x : t + x
                 t = part == 2 ? t % mod : int(t / 3)
                 to = t % test[j] == 0 ? true[j] : false[j]
-                items[to][++n[to]] = t
+                items[to,++n[to]] = t
             }
             n[j] = 0
         }
