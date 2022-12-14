@@ -21,14 +21,12 @@ END {
     print n
 }
 
+# Call with -v part=2 for part 2
 function fall(x, y) {
-    if (part == 2) { # call with -v part=2 for part 2
-        if (y == maxy + 1) {
-            cave[x,y] = "o"
-            return 1
-        }
-    } else if (y > maxy)
-        return 0
+    if (y == maxy + 1) {
+        cave[x,y] = "o"
+        return part == 2
+    }
     if (!((x,y+1) in cave))
         return fall(x, y + 1)
     if (!((x-1,y+1) in cave))
