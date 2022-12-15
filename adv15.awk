@@ -9,7 +9,7 @@ BEGIN { y = 2000000; max = 4000000 }
 END {
     calcRanges()
     for (i = 1; i <= n; i++)
-        if (x == "" || (l[i] < r[i] && l[i] < x))
+        if (x == "" || l[i] < x)
             x = l[i]
     do {
         x1 = nextOut(x)
