@@ -30,13 +30,18 @@ function max(a, b) { return a >= b ? a : b }
 function maxPressure(rest, p1, t1, p2, t2, pressure,    m, p, opened) {
     if (t1 < t2)
         return maxPressure(rest, p2, t2, p1, t1, pressure)
-    if (t1 == 0 || pressure + rest * (max(t1, t2) - 1) < best)
-        return pressure # no chance of beating the current best
+    if (t1 == 0)
+        return pressure
     if (!valve[p1] && flow[p1]) {
         rest -= flow[p1]
         pressure += flow[p1] * (--t1)
         valve[p1] = 1
         opened = 1
+    }
+    if (pressure + rest * max(t1 - 2, t2 - 1) < best) {
+        if (opened)
+            valve[p1] = 0
+        return pressure # no chance of beating the current best
     }
     m = pressure
     for (p in flow) {
