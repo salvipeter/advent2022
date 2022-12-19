@@ -14,11 +14,14 @@ END { print sum ", " prod }
 
 function max(a, b) { return a >= b ? a : b }
 
+# Rough upper bound on the quantity of material i after time t
+# (assumes that we use all the time to build robots for it)
 function upperBound(i, t) {
     return minerals[i] + robots[i] * t + (t - 1) * t / 2
 }
 
-# Rough upper bound on the quantity of material i after time t
+# Better upper bound for material 4
+# (computes a lower bound for the time needed to start making new robots)
 function guessMax(t,    t0) {
     while (upperBound(1, t0) < costs[4,1] || upperBound(3, t0) < costs[4,3])
         t0++
