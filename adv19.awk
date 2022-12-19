@@ -14,17 +14,24 @@ END { print sum ", " prod }
 
 function max(a, b) { return a >= b ? a : b }
 
+function upperBound(i, t) {
+    return minerals[i] + robots[i] * t + (t - 1) * t / 2
+}
+
+# Rough upper bound on the quantity of material i after time t
+function guessMax(t,    t0) {
+    while (upperBound(1, t0) < costs[4,1] || upperBound(3, t0) < costs[4,3])
+        t0++
+    return upperBound(4, t - t0) + robots[4] * t0
+}
+
 function maxGeodes(time, best,    i) {
-    if (time == 0)
-        return minerals[4]
-    if (best >= minerals[4] + robots[4] * time + (time - 1) * time / 2)
+    if (time == 0 || best >= guessMax(time))
         return minerals[4]
 
     for (i = 4; i >= 1; i--) {
-        if ((i == 1 &&
-             (robots[1] >= max_cost || minerals[1] >= max_cost + 1)) ||
-            ((i == 2 || i == 3) &&
-             (robots[i] >= costs[i+1,i] || minerals[i] >= costs[i+1,i] + 1)))
+        if ((i == 1 && robots[1] >= max_cost) ||
+            ((i == 2 || i == 3) && robots[i] >= costs[i+1,i]))
             continue
         can_build = 1
         for (j = 1; j <= 3; j++)
