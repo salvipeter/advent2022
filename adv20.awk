@@ -21,25 +21,17 @@ function mix() {
     for (i = 1; i <= NR; i++) {
         left[right[i]] = left[i]
         right[left[i]] = right[i]
-        if (data[i] < 0) {
-            tmp = left[i]
-            shift = -data[i] % (NR - 1)
-            for (j = 1; j <= shift; j++)
-                tmp = left[tmp]
-            left[i] = tmp
-            right[i] = right[tmp]
-            left[right[tmp]] = i
-            right[tmp] = i
-        } else {
-            tmp = right[i]
+        if (data[i] < 0)
+            shift = NR - 1 - (-data[i] % (NR - 1))
+        else
             shift = data[i] % (NR - 1)
-            for (j = 1; j <= shift; j++)
-                tmp = right[tmp]
-            right[i] = tmp
-            left[i] = left[tmp]
-            right[left[tmp]] = i
-            left[tmp] = i
-        }
+        tmp = right[i]
+        for (j = 1; j <= shift; j++)
+            tmp = right[tmp]
+        right[i] = tmp
+        left[i] = left[tmp]
+        right[left[tmp]] = i
+        left[tmp] = i
     }
 }
 
