@@ -1,4 +1,4 @@
-BEGIN { FS = "" }
+BEGIN { FS = ""; SUBSEP = "," }
 {
     for (i = 1; i <= NF; i++)
         if (match($i, /[<>^v]/)) {
@@ -8,11 +8,8 @@ BEGIN { FS = "" }
 }
 END {
     x = 2; y = 1; goalx = NF - 1; goaly = NR
-
-    # Build maps and find cycle
     for (m = 0; !cycle; m++) {
         buildMap()
-        # showMap(m)
         if (checkCycle())
             cycle = m
         moveBlizzards()
@@ -34,12 +31,9 @@ function buildMap() {
     delete map[m,x,y]
     delete map[m,goalx,goaly]
     for (i = 1; i <= n; i++)
-        if ((m,bx[i],by[i]) in map) {
-            if (match(map[m,bx[i],by[i]], /[<>^v]/))
-                map[m,bx[i],by[i]] = 2
-            else
-                map[m,bx[i],by[i]]++
-        } else
+        if ((m,bx[i],by[i]) in map)
+            map[m,bx[i],by[i]] = "+"
+        else
             map[m,bx[i],by[i]] = bd[i]
 }
 
@@ -66,39 +60,25 @@ function checkCycle() {
     return 1
 }
 
-function showMap(k) {
-    print "Minute " k ":"
-    for (j = 1; j <= NR; j++) {
-        row = ""
-        for (i = 1; i <= NF; i++)
-            if (!(k,i,j) in map)
-                row = row "."
-            else
-                row = row map[k,i,j]
-        print row
-    }
-    print ""
-}
-
 function computeAdjacent() {
-    split(pos, mxy, SUBSEP)
+    split(pos, mxy, ",")
     m = (mxy[1] + 1) % cycle
-    adjacent[1] = m SUBSEP mxy[2] - 1  SUBSEP mxy[3]
-    adjacent[2] = m SUBSEP mxy[2] + 1  SUBSEP mxy[3]
-    adjacent[3] = m SUBSEP mxy[2] SUBSEP mxy[3] - 1
-    adjacent[4] = m SUBSEP mxy[2] SUBSEP mxy[3] + 1
-    adjacent[5] = m SUBSEP mxy[2] SUBSEP mxy[3]
+    adjacent[1] = m "," mxy[2] - 1  "," mxy[3]
+    adjacent[2] = m "," mxy[2] + 1  "," mxy[3]
+    adjacent[3] = m "," mxy[2] "," mxy[3] - 1
+    adjacent[4] = m "," mxy[2] "," mxy[3] + 1
+    adjacent[5] = m "," mxy[2] "," mxy[3]
 }
 
 function inside(pos) {
-    split(pos, mxy, SUBSEP)
+    split(pos, mxy, ",")
     return !(mxy[2] == 2 && mxy[3] == 0) &&
         !(mxy[2] == goalx && mxy[3] == NR + 1)
 }
 
 function shortest(m, x, y, goalx, goaly,    distance, queue, k, best) {
     distance[m,x,y] = 0
-    queue[q=1] = m SUBSEP x SUBSEP y
+    queue[q=1] = m "," x "," y
     while (k < q) {
         pos = queue[++k]
         d = distance[pos] + 1
